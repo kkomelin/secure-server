@@ -1,12 +1,23 @@
 #!/usr/bin/env bash
 
 #
-# Applies common security measures for Ubuntu servers. 
+# Applies common security measures for Ubuntu servers.
 #
-# Afterwards, you'll only be able to SSH into the server as 'app', eg. app@1.2.3.4
+# Usage: GITHUB_USERNAME=your_username ./harden.sh
+#
+# Requires GITHUB_USERNAME environment variable. Fetches that GitHub user's SSH
+# public keys and adds them to the app user's authorized_keys. Afterwards,
+# you'll only be able to SSH into the server as 'app', e.g. app@1.2.3.4
 #
 
 set -e
+
+if [ -z "${GITHUB_USERNAME}" ]; then
+    echo "Error: GITHUB_USERNAME environment variable is required."
+    echo "Usage: GITHUB_USERNAME=your_username $0"
+    echo "Example: GITHUB_USERNAME=octocat $0"
+    exit 1
+fi
 
 # ---------------------------------------------------------
 # Step 1: Update and upgrade system packages
@@ -14,7 +25,7 @@ set -e
 
 apt update -y
 apt upgrade -y
-apt install -y vim curl htop
+apt install -y vim curl htop jq
 
 # Configure 'needrestart' for auto-restart of services after upgrades
 sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
@@ -83,14 +94,26 @@ echo "Setup app user"
 adduser --disabled-password --gecos "" app
 echo "app ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
-sudo -H -u app bash -c 'mkdir ~/.ssh'
+sudo -H -u app bash -c 'mkdir -p ~/.ssh'
 sudo -H -u app bash -c 'chmod 700 ~/.ssh'
+
+echo "Fetching SSH keys from GitHub for user: $GITHUB_USERNAME"
+KEYS_FILE=$(mktemp)
+trap 'rm -f "$KEYS_FILE"' EXIT
+curl -sf "https://api.github.com/users/${GITHUB_USERNAME}/keys" | jq -r '.[].key' | grep -v '^$' > "$KEYS_FILE"
+if [ ! -s "$KEYS_FILE" ]; then
+    echo "Error: No SSH keys found for GitHub user '$GITHUB_USERNAME'. Check the username and try again."
+    exit 1
+fi
+
 sudo -H -u app bash -c 'touch ~/.ssh/authorized_keys'
 sudo -H -u app bash -c 'chmod 600 ~/.ssh/authorized_keys'
-sudo -H -u app bash -c "echo '$AUTHORIZED_KEYS' >> ~/.ssh/authorized_keys"
+cp "$KEYS_FILE" /home/app/.ssh/authorized_keys
+chown app:app /home/app/.ssh/authorized_keys
+chmod 600 /home/app/.ssh/authorized_keys
 
-# Add new user to Docker group
-usermod -aG docker nonroot
+# Add app user to Docker group
+usermod -aG docker app
 
 # ---------------------------------------------------------
 # Step 7: Install and Configure fail2ban
