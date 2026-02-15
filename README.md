@@ -1,4 +1,4 @@
-# Secure Server
+# Secure (Ubuntu) Server
 
 Harden an Ubuntu server. 
 
