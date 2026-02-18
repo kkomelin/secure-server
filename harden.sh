@@ -14,6 +14,8 @@
 
 set -e
 
+export DEBIAN_FRONTEND=noninteractive
+
 if [ -z "${GITHUB_USERNAME}" ]; then
     read -rp "Enter your GitHub username: " GITHUB_USERNAME </dev/tty
     if [ -z "${GITHUB_USERNAME}" ]; then
