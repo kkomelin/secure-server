@@ -1,14 +1,17 @@
-# Harden an Ubuntu server
+# Secure/harden an Ubuntu server
 
 > Forked from [shiroyasha/secure-server](https://github.com/shiroyasha/secure-server) and is maintained separately.
 
 ## Features
 
-- 🔒 Disable root login and password authentication for SSH.
-- 🔒 Set up a non-root `app` user with sudo privileges.
-- 🔒 Install and configure UFW firewall.
-- 🔒 Install and configure fail2ban to protect against brute-force attacks.
-- 🔒 Set up SSH key authentication using your GitHub SSH keys.
+- Upgrade system packages
+- Install Docker and Docker Compose
+- Configure UFW firewall (custom SSH port, HTTP, HTTPS)
+- Harden SSH (disable root login, password auth, and empty passwords; enable public key auth)
+- Create a non-root `app` user with sudo and Docker access
+- Import SSH public keys from GitHub for the `app` user
+- Install and configure fail2ban against brute-force attacks
+- Secure shared memory
 
 ## Usage
 
