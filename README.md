@@ -6,6 +6,8 @@ Run this script first thing after creating your virtual server.
 
 It's suitable for servers with [OpenClaw](https://github.com/openclaw/openclaw) and other agents.
 
+__Tested with Ubuntu 24.04 LTS.__
+
 ## What it does
 
 - Upgrade system packages non-interactively, preserving existing config files
