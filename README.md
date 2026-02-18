@@ -1,8 +1,8 @@
-# Secure (Ubuntu) Server
+# Harden an Ubuntu server
 
-> This is a fork of [shiroyasha/secure-server](https://github.com/shiroyasha/secure-server).
+> Forked from [shiroyasha/secure-server](https://github.com/shiroyasha/secure-server) and is maintained separately.
 
-Harden an Ubuntu server.
+## Features
 
 - 🔒 Disable root login and password authentication for SSH.
 - 🔒 Set up a non-root `app` user with sudo privileges.
@@ -27,7 +27,7 @@ export GITHUB_USERNAME=your_username
 #### 3/ Run the hardening script.
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/kkomelin/secure-server/main/harden.sh | bash -s -e
+curl -fsSL https://raw.githubusercontent.com/kkomelin/secure-ubuntu-server/main/harden.sh | bash -s -e
 ```
 
 #### 4/ Use your new `app` user to SSH into your server.
