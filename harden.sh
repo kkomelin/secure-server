@@ -35,7 +35,7 @@ sed -i "s/#\$nrconf{kernelhints} = -1;/\$nrconf{kernelhints} = -1;/g" /etc/needr
 
 apt update -y
 apt upgrade -y
-apt install -y vim curl htop jq
+apt install -y vim nano mc curl htop jq
 
 # ---------------------------------------------------------
 # Step 2: Install Docker and Docker Compose
