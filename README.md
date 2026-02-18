@@ -2,7 +2,7 @@
 
 _Forked from [shiroyasha/secure-server](https://github.com/shiroyasha/secure-server) and is now maintained separately._
 
-Ideally run this script first thing after creating your virtual server.
+Run this script first thing after creating your virtual server.
 
 It's suitable for servers with [OpenClaw](https://github.com/openclaw/openclaw) and other agents.
 
