@@ -74,21 +74,17 @@ ufw --force enable
 # Step 5: Secure SSH Configuration
 # ---------------------------------------------------------
 
-# 1/ Enable public key authentication
-# 2/ disable password-based login
-# 3/ and enforce other security settings
-
 sed -i -e '/^\(#\|\)Port /s/^.*$/Port '"$SSH_PORT"'/' /etc/ssh/sshd_config
 sed -i -e '/^\(#\|\)PasswordAuthentication/s/^.*$/PasswordAuthentication no/' /etc/ssh/sshd_config
 sed -i -e '/^\(#\|\)PubkeyAuthentication/s/^.*$/PubkeyAuthentication yes/' /etc/ssh/sshd_config
 sed -i -e '/^\(#\|\)PermitEmptyPasswords/s/^.*$/PermitEmptyPasswords no/' /etc/ssh/sshd_config
+sed -i -e '/^\(#\|\)PermitRootLogin/s/^.*$/PermitRootLogin no/' /etc/ssh/sshd_config
 
 if ! grep -q "^ChallengeResponseAuthentication" /etc/ssh/sshd_config; then
     echo 'ChallengeResponseAuthentication no' >> /etc/ssh/sshd_config
 else
     sed -i -e '/^\(#\|\)ChallengeResponseAuthentication/s/^.*$/ChallengeResponseAuthentication no/' /etc/ssh/sshd_config
 fi
-
 
 # ---------------------------------------------------------
 # Step 6: Create Non-Root User with Sudo and Docker Access
@@ -147,14 +143,7 @@ echo "Secure shared memory"
 echo "tmpfs /run/shm tmpfs defaults,noexec,nosuid 0 0" >> /etc/fstab
 
 # ---------------------------------------------------------
-# Step 9: Disable Root User Login
-# ---------------------------------------------------------
-
-echo "Disable root user login"
-sed -i -e '/^\(#\|\)PermitRootLogin/s/^.*$/PermitRootLogin no/' /etc/ssh/sshd_config
-
-# ---------------------------------------------------------
-# Step 10: Reboot to Apply Changes
+# Step 9: Reboot to Apply Changes
 # ---------------------------------------------------------
 
 echo "Rebooting so changes can take effect"
