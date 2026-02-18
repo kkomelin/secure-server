@@ -4,9 +4,9 @@
 
 Ideally run this script first thing after creating your virtual server.
 
-It's suitable for [OpenClaw](https://github.com/openclaw/openclaw) and other agents.
+It's suitable for servers with [OpenClaw](https://github.com/openclaw/openclaw) and other agents.
 
-## Features
+## What it does
 
 - Upgrade system packages
 - Create a non-root `app` user with sudo access and import SSH public keys from GitHub
@@ -15,6 +15,7 @@ It's suitable for [OpenClaw](https://github.com/openclaw/openclaw) and other age
 - Harden SSH (disable root login, password auth, and empty passwords; enable public key auth)
 - Install and configure fail2ban against brute-force attacks
 - Secure shared memory
+- Reboot to apply changes
 
 ## Usage
 
