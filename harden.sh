@@ -36,7 +36,7 @@ sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrest
 sed -i "s/#\$nrconf{kernelhints} = -1;/\$nrconf{kernelhints} = -1;/g" /etc/needrestart/needrestart.conf
 
 apt update -y
-apt upgrade -y
+apt upgrade -y -o Dpkg::Options::="--force-confold"
 apt install -y vim nano mc curl htop jq
 
 # ---------------------------------------------------------
