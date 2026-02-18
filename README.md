@@ -39,7 +39,7 @@ If not set, the script will prompt for each interactively. `SSH_PORT` defaults t
 ### 3. Run the hardening script
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/kkomelin/secure-ubuntu-server/main/harden.sh | bash
+curl -fsSL "https://raw.githubusercontent.com/kkomelin/secure-ubuntu-server/main/harden.sh?$(date +%s)" | bash
 ```
 
 ### 4. Use your new `app` user to SSH into your server
