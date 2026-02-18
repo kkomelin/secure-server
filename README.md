@@ -1,6 +1,6 @@
 # Secure an Ubuntu server
 
-> Forked from [shiroyasha/secure-server](https://github.com/shiroyasha/secure-server) and is now maintained separately.
+_Forked from [shiroyasha/secure-server](https://github.com/shiroyasha/secure-server) and is now maintained separately._
 
 Ideally run this script first thing after creating your virtual server.
 
