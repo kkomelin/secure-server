@@ -9,11 +9,10 @@ It's suitable for [OpenClaw](https://github.com/openclaw/openclaw) and other age
 ## Features
 
 - Upgrade system packages
-- Install Docker and Docker Compose
+- Create a non-root `app` user with sudo access and import SSH public keys from GitHub
+- Install Docker and Docker Compose, add `app` to the Docker group
 - Configure UFW firewall (custom SSH port, HTTP, HTTPS)
 - Harden SSH (disable root login, password auth, and empty passwords; enable public key auth)
-- Create a non-root `app` user with sudo and Docker access
-- Import SSH public keys from GitHub for the `app` user
 - Install and configure fail2ban against brute-force attacks
 - Secure shared memory
 

@@ -40,56 +40,7 @@ apt upgrade -y
 apt install -y vim nano mc curl htop jq
 
 # ---------------------------------------------------------
-# Step 2: Install Docker and Docker Compose
-# ---------------------------------------------------------
-
-# Update package list and install prerequisites
-apt install -y ca-certificates gnupg
-
-# Add Docker's official GPG key and set up repository
-install -m 0755 -d /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-chmod a+r /etc/apt/keyrings/docker.gpg
-echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-# Install Docker and Docker Compose plugins
-apt update -y
-apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-
-# ---------------------------------------------------------
-# Step 3: Configure Virtual Memory Overcommit
-# ---------------------------------------------------------
-
-sysctl vm.overcommit_memory=1
-echo 'vm.overcommit_memory = 1' >> /etc/sysctl.conf
-
-# ---------------------------------------------------------
-# Step 4: Configure UFW Firewall
-# ---------------------------------------------------------
-
-ufw allow "$SSH_PORT"/tcp
-ufw allow http
-ufw allow https
-ufw --force enable
-
-# ---------------------------------------------------------
-# Step 5: Secure SSH Configuration
-# ---------------------------------------------------------
-
-sed -i -e '/^\(#\|\)Port /s/^.*$/Port '"$SSH_PORT"'/' /etc/ssh/sshd_config
-sed -i -e '/^\(#\|\)PasswordAuthentication/s/^.*$/PasswordAuthentication no/' /etc/ssh/sshd_config
-sed -i -e '/^\(#\|\)PubkeyAuthentication/s/^.*$/PubkeyAuthentication yes/' /etc/ssh/sshd_config
-sed -i -e '/^\(#\|\)PermitEmptyPasswords/s/^.*$/PermitEmptyPasswords no/' /etc/ssh/sshd_config
-sed -i -e '/^\(#\|\)PermitRootLogin/s/^.*$/PermitRootLogin no/' /etc/ssh/sshd_config
-
-if ! grep -q "^ChallengeResponseAuthentication" /etc/ssh/sshd_config; then
-    echo 'ChallengeResponseAuthentication no' >> /etc/ssh/sshd_config
-else
-    sed -i -e '/^\(#\|\)ChallengeResponseAuthentication/s/^.*$/ChallengeResponseAuthentication no/' /etc/ssh/sshd_config
-fi
-
-# ---------------------------------------------------------
-# Step 6: Create Non-Root User with Sudo and Docker Access
+# Step 2: Create Non-Root User and Set Up SSH Access
 # ---------------------------------------------------------
 
 echo "Setup app user"
@@ -114,8 +65,57 @@ cp "$KEYS_FILE" /home/app/.ssh/authorized_keys
 chown app:app /home/app/.ssh/authorized_keys
 chmod 600 /home/app/.ssh/authorized_keys
 
+# ---------------------------------------------------------
+# Step 3: Install Docker and Docker Compose
+# ---------------------------------------------------------
+
+# Update package list and install prerequisites
+apt install -y ca-certificates gnupg
+
+# Add Docker's official GPG key and set up repository
+install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+chmod a+r /etc/apt/keyrings/docker.gpg
+echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# Install Docker and Docker Compose plugins
+apt update -y
+apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
 # Add app user to Docker group
 usermod -aG docker app
+
+# ---------------------------------------------------------
+# Step 4: Configure Virtual Memory Overcommit
+# ---------------------------------------------------------
+
+sysctl vm.overcommit_memory=1
+echo 'vm.overcommit_memory = 1' >> /etc/sysctl.conf
+
+# ---------------------------------------------------------
+# Step 5: Configure UFW Firewall
+# ---------------------------------------------------------
+
+ufw allow "$SSH_PORT"/tcp
+ufw allow http
+ufw allow https
+ufw --force enable
+
+# ---------------------------------------------------------
+# Step 6: Secure SSH Configuration
+# ---------------------------------------------------------
+
+sed -i -e '/^\(#\|\)Port /s/^.*$/Port '"$SSH_PORT"'/' /etc/ssh/sshd_config
+sed -i -e '/^\(#\|\)PasswordAuthentication/s/^.*$/PasswordAuthentication no/' /etc/ssh/sshd_config
+sed -i -e '/^\(#\|\)PubkeyAuthentication/s/^.*$/PubkeyAuthentication yes/' /etc/ssh/sshd_config
+sed -i -e '/^\(#\|\)PermitEmptyPasswords/s/^.*$/PermitEmptyPasswords no/' /etc/ssh/sshd_config
+sed -i -e '/^\(#\|\)PermitRootLogin/s/^.*$/PermitRootLogin no/' /etc/ssh/sshd_config
+
+if ! grep -q "^ChallengeResponseAuthentication" /etc/ssh/sshd_config; then
+    echo 'ChallengeResponseAuthentication no' >> /etc/ssh/sshd_config
+else
+    sed -i -e '/^\(#\|\)ChallengeResponseAuthentication/s/^.*$/ChallengeResponseAuthentication no/' /etc/ssh/sshd_config
+fi
 
 # ---------------------------------------------------------
 # Step 7: Install and Configure fail2ban
