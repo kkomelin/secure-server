@@ -15,7 +15,7 @@
 set -e
 
 if [ -z "${GITHUB_USERNAME}" ]; then
-    read -rp "Enter your GitHub username: " GITHUB_USERNAME
+    read -rp "Enter your GitHub username: " GITHUB_USERNAME </dev/tty
     if [ -z "${GITHUB_USERNAME}" ]; then
         echo "Error: GitHub username is required."
         exit 1
@@ -23,7 +23,7 @@ if [ -z "${GITHUB_USERNAME}" ]; then
 fi
 
 if [ -z "${SSH_PORT}" ]; then
-    read -p "SSH port [20202]: " SSH_PORT
+    read -p "SSH port [20202]: " SSH_PORT </dev/tty
     SSH_PORT=${SSH_PORT:-20202}
 fi
 
