@@ -4,12 +4,12 @@
 # Applies common security measures for Ubuntu servers.
 #
 # Usage: ./harden.sh
-#    or: GITHUB_USERNAME=your_username ./harden.sh
+#    or: GITHUB_USERNAME=your_username SSH_PORT=20202 ./harden.sh
 #
-# Prompts for your GitHub username if not provided via env var. Fetches that
-# GitHub user's SSH public keys and adds them to the app user's authorized_keys.
-# Afterwards, you'll only be able to SSH into the server as 'app', e.g.
-# app@1.2.3.4
+# Prompts for GITHUB_USERNAME and SSH_PORT if not provided via env vars.
+# Fetches the GitHub user's SSH public keys and adds them to the app user's
+# authorized_keys. Afterwards, you'll only be able to SSH into the server
+# as 'app', e.g. app@1.2.3.4
 #
 
 set -e
@@ -22,8 +22,10 @@ if [ -z "${GITHUB_USERNAME}" ]; then
     fi
 fi
 
-read -p "SSH port [20202]: " SSH_PORT
-SSH_PORT=${SSH_PORT:-20202}
+if [ -z "${SSH_PORT}" ]; then
+    read -p "SSH port [20202]: " SSH_PORT
+    SSH_PORT=${SSH_PORT:-20202}
+fi
 
 # ---------------------------------------------------------
 # Step 1: Update and upgrade system packages
