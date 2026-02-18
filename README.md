@@ -8,7 +8,7 @@ It's suitable for servers with [OpenClaw](https://github.com/openclaw/openclaw) 
 
 ## What it does
 
-- Upgrade system packages
+- Upgrade system packages non-interactively, preserving existing config files
 - Create a non-root `app` user with sudo access and import SSH public keys from GitHub
 - Install Docker and Docker Compose, add `app` to the Docker group
 - Configure UFW firewall (custom SSH port, HTTP, HTTPS)
