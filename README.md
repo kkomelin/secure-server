@@ -1,6 +1,8 @@
-# Secure/harden an Ubuntu server
+# Secure and harden an Ubuntu server
 
 > Forked from [shiroyasha/secure-server](https://github.com/shiroyasha/secure-server) and is maintained separately.
+
+You use this script first thing after creating your virtual server. It's suitable for [OpenClaw](https://github.com/openclaw/openclaw) and other agents.
 
 ## Features
 
@@ -15,26 +17,30 @@
 
 ## Usage
 
-#### 1/ SSH into your server as root
+### 1/ SSH into your server as root
 
 ```bash
 ssh root@your-server-ip
 ```
 
-#### 2/ Set the `GITHUB_USERNAME` environment variable to your GitHub username.
+### 2/ Optionally set the `GITHUB_USERNAME` environment variable.
 
 ```bash
 export GITHUB_USERNAME=your_username
 ```
 
-#### 3/ Run the hardening script.
+If not set, the script will prompt you for it interactively.
+
+### 3/ Run the hardening script.
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/kkomelin/secure-ubuntu-server/main/harden.sh | bash -s -e
+curl -fsSL https://raw.githubusercontent.com/kkomelin/secure-ubuntu-server/main/harden.sh | bash
 ```
 
-#### 4/ Use your new `app` user to SSH into your server.
+The script will also prompt for an SSH port (default: `20202`).
+
+### 4/ Use your new `app` user to SSH into your server.
 
 ```bash
-ssh app@your-server-ip
+ssh -p 20202 app@your-server-ip
 ```
