@@ -34,6 +34,8 @@ export SSH_PORT=20202
 
 If not set, the script will prompt for each interactively. `SSH_PORT` defaults to `20202`.
 
+> Your GitHub account must have at least one [SSH key](https://github.com/settings/keys) added. The script will exit if none are found, before any changes take effect.
+
 ### 3/ Run the hardening script.
 
 ```bash
